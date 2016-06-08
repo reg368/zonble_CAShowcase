@@ -64,6 +64,7 @@
 	cell.imageView.image = [UIImage imageNamed:imageName];
     return cell;
 }
+/* self delegate 實作當動畫結束後的程式  */
 - (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
 {
 	if ([theAnimation isEqual:[transitionLayer animationForKey:@"move"]]) {
@@ -80,21 +81,30 @@
 	transitionLayer.opacity = 1.0;
 	transitionLayer.contents = (id)aCell.imageView.image.CGImage;
 	transitionLayer.frame = [[UIApplication sharedApplication].keyWindow convertRect:aCell.imageView.bounds fromView:aCell.imageView];
-	[[UIApplication sharedApplication].keyWindow.layer addSublayer:transitionLayer];
+	/* 加入 transitionLayer  */
+    [[UIApplication sharedApplication].keyWindow.layer addSublayer:transitionLayer];
 	[CATransaction commit];
 	
+    /* 圖像往左上方飄移走 : from : transitionLayer.position to : CGPointZero  */
 	CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
 	positionAnimation.fromValue = [NSValue valueWithCGPoint:transitionLayer.position];
 	positionAnimation.toValue = [NSValue valueWithCGPoint:CGPointZero];
 
+    /* 圖像往內部縮小直到消失 : 將自己的bounds 從初始值變成 0   */
 	CABasicAnimation *boundsAnimation = [CABasicAnimation animationWithKeyPath:@"bounds"];
 	boundsAnimation.fromValue = [NSValue valueWithCGRect:transitionLayer.bounds];
 	boundsAnimation.toValue = [NSValue valueWithCGRect:CGRectZero];
 
+    /* 肉眼無法看出任何動畫 : 透明度(opacity)從1.0(不透明) 變成 0.5 半透明  */
 	CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
 	opacityAnimation.fromValue = @1.0f;
 	opacityAnimation.toValue = @0.5f;	
 	
+    /* 圖像順時針旋轉一圈 : 
+            M_PI : 圓周率 (3.1415)
+            from : @(0 * M_PI) 0 的話就是從下方開始往上旋轉
+            to : 2 * M_PI : 順時針轉一圈 , 1 就是轉半圈 , 負數的話就是逆時針 , 以此類推
+     */
 	CABasicAnimation *rotateAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
 	rotateAnimation.fromValue = @(0 * M_PI);
 	rotateAnimation.toValue = @(2 * M_PI);
@@ -102,9 +112,11 @@
 	
 	CAAnimationGroup *group = [CAAnimationGroup animation];
 	group.beginTime = CACurrentMediaTime() + 0.25;
-	group.duration = 0.5;
-	group.animations = @[positionAnimation, boundsAnimation, opacityAnimation, rotateAnimation];
-	group.delegate = self;
+	group.duration = 1.0;
+	//group.animations = @[positionAnimation, boundsAnimation, opacityAnimation, rotateAnimation];
+    group.animations = @[rotateAnimation]; /* 往左上方飄移走 from transitionLayer.position to CGPointZero  */
+	/* 指定delegate 為自己class 用來實作當動畫結束後的callback method */
+    group.delegate = self;
 	group.fillMode = kCAFillModeForwards;
 	group.removedOnCompletion = NO;
 	

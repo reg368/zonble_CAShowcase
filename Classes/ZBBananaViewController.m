@@ -54,7 +54,7 @@
 	CAAnimationGroup *group = [CAAnimationGroup animation];
 	group.autoreverses = YES;
 	group.duration = 1.0;
-	group.animations = @[animation, scaoleAnimation];
+	group.animations = @[animation ,scaoleAnimation];
 	group.repeatCount = NSNotFound;
 
 	[bananaLayer addAnimation:group forKey:@"move"];

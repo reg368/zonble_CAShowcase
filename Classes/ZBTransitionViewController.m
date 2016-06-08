@@ -53,8 +53,10 @@
 
 - (void)loadView 
 {
-	self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-	self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    //[UIScreen mainScreen].bounds;
+    self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    //self.view.frame = CGRectMake(self.view.frame.origin.x, CGRectGetMaxY(self.navigationController.navigationBar.frame), self.view.frame.size.width, self.view.frame.size.height);
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	self.view.backgroundColor = [UIColor blackColor];
 	
 	self.imageView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - 160.0)];
@@ -88,6 +90,8 @@
 - (void)viewDidLoad 
 {
 	[super viewDidLoad];
+    if ([self respondsToSelector:@selector(edgesForExtendedLayout)])
+        self.edgesForExtendedLayout = UIRectEdgeNone;
 	self.title = @"Transitions";
 	
 	if (!typeController) {
