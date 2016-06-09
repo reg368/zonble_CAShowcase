@@ -113,9 +113,9 @@
 	CAAnimationGroup *group = [CAAnimationGroup animation];
 	group.beginTime = CACurrentMediaTime() + 0.25;
 	group.duration = 1.0;
-	//group.animations = @[positionAnimation, boundsAnimation, opacityAnimation, rotateAnimation];
-    group.animations = @[rotateAnimation]; /* 往左上方飄移走 from transitionLayer.position to CGPointZero  */
-	/* 指定delegate 為自己class 用來實作當動畫結束後的callback method */
+	group.animations = @[positionAnimation, boundsAnimation, opacityAnimation, rotateAnimation];
+    //group.animations = @[rotateAnimation];
+    /* 指定delegate 為自己class 用來實作當動畫結束後的callback method */
     group.delegate = self;
 	group.fillMode = kCAFillModeForwards;
 	group.removedOnCompletion = NO;

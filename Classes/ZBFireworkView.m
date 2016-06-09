@@ -6,6 +6,7 @@
 - (void)tap:(UIGestureRecognizer *)r
 {
 	CGPoint location = [r locationInView:self];
+    /* hue 從時間相減去亂數取得煙火施放的位置 */
 	CGFloat hue = [NSDate timeIntervalSinceReferenceDate] - floor([NSDate timeIntervalSinceReferenceDate]);
 	ZBFireworkLayer *aLayer = [[ZBFireworkLayer alloc] initWithHue:hue];
 	CGPoint from = CGPointMake(location.x, self.bounds.size.height - 50.0);

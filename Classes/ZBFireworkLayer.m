@@ -18,15 +18,19 @@
 	return self;
 }
 
+
 - (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
 {
-	if ([theAnimation isEqual:[self animationForKey:@"move"]]) {
-		NSUInteger count = self.sublayers.count;
+	/* move動畫結束時,實作小球分散出去的動畫 'explode' */
+    if ([theAnimation isEqual:[self animationForKey:@"move"]]) {
+		/* 取得子layer的數量 (要分散出去的小球) */
+        NSUInteger count = self.sublayers.count;
 		if (!count) {
 			count = 1;
 		}
 		NSUInteger index = 0;
 		CGFloat radius = 300.0 * (random() % 100 / 100.0);
+        /* 呈現要爆炸出去的小球 */
 		for (ZBLayoutLayer *aLayer in self.sublayers) {
 			CGFloat r = M_PI * 2 / (CGFloat)count * (CGFloat)index;
 			CGFloat x = cos(r) * radius;
@@ -54,6 +58,7 @@
 	}
 }
 
+/* 實作球往上飛的動畫 'move' */
 - (void)animateInLayer:(CALayer *)inSuperlayer from:(CGPoint)inFrom to:(CGPoint)inTo
 {
 	[CATransaction begin];
